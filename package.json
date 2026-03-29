@@ -1,0 +1,16 @@
+{
+  "name": "silhouette-mcp-app",
+  "version": "1.0.0",
+  "description": "A ChatGPT MCP UI App for Silhouette America",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^1.3.2",
+    "@modelcontextprotocol/sdk": "^1.28.0",
+    "dotenv": "^17.3.1",
+    "node-cache": "^5.1.2",
+    "zod": "^4.3.6"
+  }
+}

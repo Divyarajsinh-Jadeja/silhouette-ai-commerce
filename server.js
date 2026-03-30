@@ -155,7 +155,7 @@ async function fetchKlevuProducts(query) {
         title: item.name || "Silhouette Product",
         price: formattedPrice,
         status: item.inStock === "yes" ? "In Stock" : "Out of stock",
-        image: item.imageUrl || "https://images.unsplash.com/photo-1605647540924-852290f6b0d5?auto=format&fit=crop&q=80&w=400&h=400&ixlib=rb-4.0.3",
+        image: item.imageUrl || "https://www.silhouetteamerica.com/media/catalog/product/placeholder/default/silhouette-logo.png",
         link: item.url || "https://www.silhouetteamerica.com/",
         description: description,
         hasOptions: item.isCustomOptionsAvailable === "yes"
@@ -338,7 +338,7 @@ function createProductServer() {
     async () => ({
       contents: [
         {
-          uri: "ui://widget/product-v13.html",
+          uri: "ui://widget/product-v15.html",
           mimeType: RESOURCE_MIME_TYPE,
           text: widgetHtml,
         },

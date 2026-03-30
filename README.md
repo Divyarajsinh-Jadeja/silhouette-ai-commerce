@@ -3,24 +3,18 @@
 
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org)
 [![MCP SDK](https://img.shields.io/badge/MCP%20SDK-%40modelcontextprotocol%2Fext--apps-blueviolet)](https://www.npmjs.com/package/@modelcontextprotocol/ext-apps)
+[![Klevu AI](https://img.shields.io/badge/Klevu-AI%20Search-blue?logo=lightning&logoColor=white)](https://www.klevu.com/)
 [![Magento 2](https://img.shields.io/badge/Magento-2.x%20REST%20API-F26322?logo=magento&logoColor=white)](https://devdocs.magento.com/guides/v2.4/rest/bk-rest.html)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
 ## 📖 Overview
 
-**Silhouette AI Commerce** is a production-ready **Model Context Protocol (MCP)** server that transforms ChatGPT into a fully autonomous Silhouette America brand assistant.
+**Silhouette AI Commerce** is a production-ready **Model Context Protocol (MCP)** server that transforms ChatGPT into a fully autonomous Silhouette America brand assistant. 
 
-Instead of just answering questions, this agent can:
-- 🛍️ **Browse and search** the live Silhouette America product catalog
-- 🛒 **Manage shopping carts** — create, add items, apply coupons
-- 📦 **Track orders** and look up order history in real-time
-- ↩️ **Initiate returns (RMA)** directly through chat
-- 📄 **Fetch CMS policy pages** like Shipping & Returns
-- ⭐ **Pull product reviews** for any SKU
-
-Built on top of the **Agentic Commerce Protocol (ACP)** — the future of AI-driven e-commerce.
+Unlike standard search, this system uses a **Hybrid Architecture**:
+- ⚡ **Klevu AI**: Powers lightning-fast product discovery, categories, and policy page searches.
+- 🛍️ **Magento 2 REST API**: Handles transactional tasks like cart management, order tracking, and reviews.
 
 ---
 
@@ -28,13 +22,13 @@ Built on top of the **Agentic Commerce Protocol (ACP)** — the future of AI-dri
 
 | Feature | Description |
 |---|---|
-| 🔍 **Smart Product Search** | Fuzzy search with SKU/Name matching + 1-hour NodeCache TTL |
-| 🎨 **Premium UI Widget** | Glassmorphic dark-mode card carousel rendered inside ChatGPT |
-| 🛒 **Full Cart Lifecycle** | Create → Add items → Apply coupons → Review cart |
-| 📦 **Order Tracking** | Real-time shipment tracking via Magento Shipments API |
-| ↩️ **Return Management** | Structured RMA initiation with item-level granularity |
-| 🔒 **Brand Safety** | AI is instructed to NEVER suggest third-party competitors |
-| ⚡ **Sub-100ms Search** | Intelligent caching prevents redundant API calls |
+| 🔍 **Klevu AI Search** | Typo-tolerant, sub-100ms natural language search for products and policies. |
+| 🎨 **Premium UI Widget** | Glassmorphic cards with "Buy Now" direct-to-web redirection for Expedia-style checkout. |
+| 🛒 **Full Cart Lifecycle** | Invisible guest cart management (Create → Add items → Apply coupons). |
+| 📦 **Order Tracking** | Real-time shipment tracking for customers directly within the chat. |
+| ↩️ **Return Management** | Structured RMA initiation flow for a seamless post-purchase experience. |
+| ⚡ **Smart RAM Caching** | 10-minute NodeCache TTL to balance data freshness and API performance. |
+| 🔒 **Brand Safety** | Hardcoded instructions to never suggest third-party competitors (Amazon, etc.). |
 
 ---
 
@@ -47,104 +41,63 @@ ChatGPT (User Interface)
         ▼
 ┌─────────────────────────┐
 │   MCP Server (Node.js)  │  ← server.js (Port 8787)
-│   @modelcontextprotocol │
-│   /ext-apps SDK         │
+│   (Hybrid Intelligence) │
 └────────────┬────────────┘
              │
-             │  REST API (Bearer Token Auth)
-             ▼
-┌─────────────────────────┐
-│  Magento 2 Backend      │
-│  (Silhouette America    │
-│   Staging/Production)   │
-└─────────────────────────┘
+      ┌──────┴───────┐
+      ▼              ▼
+┌────────────┐ ┌────────────┐
+│  Klevu AI  │ │ Magento 2  │
+│  (Search)  │ │ (Commerce) │
+└────────────┘ └────────────┘
 ```
 
 ---
 
-## 🛠️ Tool Suite (11 Tools)
+## 🛠️ Tool Suite
 
-### 🛍️ Catalog & Discovery
-| Tool | Description |
-|---|---|
-| `search_products` | Search live catalog by name or SKU — renders a premium UI card carousel |
-| `c_get_categories` | Fetch the full Magento category tree for navigation |
-| `c_get_policy_page` | Retrieve CMS pages (e.g., `return-policy`, `shipping-info`) |
+### 🛍️ Discovery (Powered by Klevu AI)
+- `search_products`: Multi-dimensional product search with premium UI cards.
+- `c_get_categories`: Browse the live category hierarchy.
+- `c_get_policy_page`: Instant lookup of Store Policies (Shipping, Returns, etc.).
 
-### 🛒 Cart Management
-| Tool | Description |
-|---|---|
-| `c_create_cart` | Initialize a new guest shopping cart session |
-| `c_add_to_cart` | Add a product by SKU and quantity to the active cart |
-| `c_get_cart` | View all items currently in the cart |
-| `c_apply_coupon` | Apply a discount coupon code to the cart |
+### 🛒 Cart & Checkout (Magento REST)
+- `c_create_cart`: Initialize a secure guest shopping session.
+- `c_add_to_cart`: Add products to cart for seamless handoff.
+- `c_apply_coupon`: Apply discount codes in real-time.
 
-### 📦 Post-Purchase Support
-| Tool | Description |
-|---|---|
-| `admin_get_order` | Retrieve complete order details by Order ID |
-| `admin_get_order_tracking` | Get real-time shipment & tracking information |
-| `c_initiate_return` | Start a return (RMA) for one or more items |
-| `admin_get_product_reviews` | Fetch ratings and reviews for a product SKU |
+### 📦 Customer Support
+- `admin_get_order`: Full order detail retrieval.
+- `admin_get_order_tracking`: Real-time tracking status.
+- `admin_get_product_reviews`: Fetch public ratings and feedback.
+- `c_initiate_return`: Start the return/RMA process.
 
 ---
 
 ## 🚀 Getting Started
 
-### Prerequisites
-- Node.js 18+
-- A Magento 2 store with REST API access
-- A Magento 2 Bearer Token (Admin or Integration)
-- An [ngrok](https://ngrok.com) account (for local tunneling to ChatGPT)
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/silhouette-ai-commerce.git
-cd silhouette-ai-commerce
+### 1. Configure Environment
+Create a `.env` file in the root directory:
+```env
+PORT=8787
+MAGENTO_BASE_URL=https://www.silhouetteamerica.com/rest
+MAGENTO_MEDIA_URL=https://www.silhouetteamerica.com/media/catalog/product
+MAGENTO_TOKEN=your_token
+KLEVU_SEARCH_URL=https://uscs32v2.ksearchnet.com/cs/v2/search
+KLEVU_API_KEY=your_klevu_key
 ```
 
-### 2. Install Dependencies
-
+### 2. Install & Run
 ```bash
 npm install
-```
-
-### 3. Configure Environment
-
-Open `server.js` and update the configuration constants at the top of the file:
-
-```js
-const MAGENTO_BASE_URL = "https://your-magento-store.com/rest";
-const MAGENTO_TOKEN = "your_bearer_token_here";
-```
-
-> 💡 **Tip**: For production, migrate these to a `.env` file using `dotenv`.
-
-### 4. Start the Server
-
-```bash
 npm start
 ```
 
-The server will start on `http://localhost:8787/mcp`.
-
-### 5. Expose via ngrok
-
-In a separate terminal:
-
+### 3. Expose & Connect
 ```bash
 ngrok http 8787
 ```
-
-Copy the generated HTTPS URL (e.g., `https://xxxx.ngrok-free.app/mcp`).
-
-### 6. Connect to ChatGPT
-
-1. Go to **ChatGPT** → **Settings** → **Connectors**
-2. Click **"Add Connector"** → **"Model Context Protocol"**
-3. Paste your ngrok URL
-4. Click **Connect**
+Paste the ngrok URL into **ChatGPT Settings > Apps & Connectors > Add Connector**.
 
 ---
 
@@ -152,70 +105,14 @@ Copy the generated HTTPS URL (e.g., `https://xxxx.ngrok-free.app/mcp`).
 
 ```
 silhouette-ai-commerce/
-├── server.js              # Main MCP server — all tools registered here
-├── package.json           # Project manifest & dependencies
+├── server.js              # Core MCP Logic & API Adapters
+├── .env                   # Protected API Credentials
 ├── public/
-│   ├── product-widget.html  # Premium glassmorphic product card UI
-│   └── hotel-widget.html    # (Demo) Hotel widget UI example
-└── README.md              # You are here
+│   └── product-widget.html  # Premium UI Widget Source (Tailwind-like Vanilla CSS)
+└── README.md              # Documentation
 ```
 
 ---
 
-## 🎨 UI Widget
-
-When `search_products` is triggered, ChatGPT loads a custom HTML widget rendered as an iframe inside the chat interface.
-
-**Features:**
-- 🌙 Auto dark/light mode based on system preference
-- ✨ Glassmorphic badges with backdrop blur
-- 🃏 Horizontal scrolling product card carousel
-- 🔍 Smart routing: single result → detail view, multiple → carousel
-- ⏳ Shimmer skeleton loading states
-- 💫 Spring physics micro-animations on hover
-
----
-
-## 🔒 Brand Safety
-
-This agent is engineered to act **exclusively** as a Silhouette America brand representative:
-
-- ❌ **Never** recommends Amazon, Walmart, Michaels, Joann, or any competitor
-- ❌ **Never** tells users to "check elsewhere" if an item is out of stock
-- ✅ Always suggests alternative Silhouette products or checking back later
-- ✅ All product links route back to `silhouetteamerica.com`
-
----
-
-## 🔧 Tech Stack
-
-| Technology | Purpose |
-|---|---|
-| **Node.js (ESM)** | Server runtime |
-| **@modelcontextprotocol/ext-apps** | MCP SDK for ChatGPT integration |
-| **Zod** | Input schema validation for all tools |
-| **node-cache** | In-memory caching (1-hour TTL on product search) |
-| **Magento 2 REST API** | Live e-commerce backend |
-| **ngrok** | Local-to-public HTTPS tunneling |
-| **Vanilla HTML/CSS** | Lightweight, zero-dependency UI widget |
-
----
-
-## 🗺️ Roadmap
-
-- [ ] Migrate secrets to `.env` using `dotenv`
-- [ ] Deploy to permanent host (Vercel / Railway / Fly.io)
-- [ ] Implement `c_initiate_return` with live Magento RMA module API
-- [ ] Add `c_checkout` tool with Stripe tokenized payment flow (ACP Phase 3)
-- [ ] Wishlist management tools
-- [ ] Multi-language support (BCP 47)
-
----
-
 ## 📄 License
-
-MIT © 2025 — Built with ❤️ for the Agentic Commerce era.
-
----
-
-> **Note**: This project is an independent integration built on top of the Magento 2 REST API. "Silhouette" and "Silhouette America" are trademarks of their respective owners.
+MIT © 2026 — Built for Silhouette America.

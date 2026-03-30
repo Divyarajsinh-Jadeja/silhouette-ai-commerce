@@ -257,6 +257,7 @@
       margin-bottom: 16px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
+      line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -275,25 +276,53 @@
       color: var(--silh-cyan);
     }
 
-    /* Action Button */
+    /* Card Action Buttons */
+    .card-actions {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-buy-now {
+      background: linear-gradient(135deg, var(--silh-cyan), var(--silh-cyan-dark));
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius-badge);
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-family: var(--font-brand);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(0, 181, 204, 0.25);
+      text-align: center;
+    }
+
+    .btn-buy-now:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 181, 204, 0.35);
+    }
+
     .btn-view {
       background: transparent;
-      color: var(--text-primary);
+      color: var(--text-secondary);
       border: 1px solid var(--border-light);
       padding: 8px 16px;
       border-radius: var(--radius-badge);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       font-family: var(--font-brand);
       cursor: pointer;
       transition: all 0.2s ease;
+      width: 100%;
+      text-align: center;
     }
 
-    .card:hover .btn-view {
-      background: var(--silh-cyan);
-      color: white;
-      border-color: var(--silh-cyan);
-      box-shadow: 0 4px 12px rgba(0, 181, 204, 0.2);
+    .btn-view:hover {
+      background: var(--bg-body);
+      color: var(--text-primary);
     }
 
     /* Single Detail View UI */
@@ -612,20 +641,21 @@
         const priceText = p.price && p.price !== "N/A" ? p.price : "View Store";
         const buyLink = p.link || 'https://www.silhouetteamerica.com';
         const optionsBadge = p.hasOptions ? `<div class="badge options" style="left:auto; right:14px; background:#4B5563;">Options</div>` : '';
+        const buyBtnLabel = isOut ? '🔔 Notify Me' : '🛒 Buy Now';
 
         return `
-          <div class="card" onclick="window.open('${buyLink}', '_blank')">
+          <div class="card">
             <div class="${badgeClass}">${statusText}</div>
             ${optionsBadge}
-            <div class="card-img-wrapper">
+            <div class="card-img-wrapper" onclick="window.open('${buyLink}', '_blank')" style="cursor:pointer;">
               <img src="${p.image}" alt="${title}" onerror="this.src='https://images.unsplash.com/photo-1605647540924-852290f6b0d5?auto=format&fit=crop&q=80&w=400&h=400&ixlib=rb-4.0.3';">
             </div>
             <div class="card-content">
               <div class="card-sku">SKU: ${p.sku || ""}</div>
               <div class="card-title">${title}</div>
-              <div class="card-footer">
-                <div class="card-price">${priceText}</div>
-                <button class="btn-view">Details</button>
+              <div class="card-price" style="margin-bottom:16px;">${priceText}</div>
+              <div class="card-actions">
+                <button class="btn-buy-now" onclick="window.open('${buyLink}', '_blank')">${buyBtnLabel}</button>
               </div>
             </div>
           </div>

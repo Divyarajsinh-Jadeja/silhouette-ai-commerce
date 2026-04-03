@@ -1,0 +1,77 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Silhouette America AI Commerce",
+    "description": "Premium Shopping & Support Assistant for Silhouette America products.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://silhouette-ai-ecommerce-mcp.silhouetteamerica.com",
+      "description": "Production Server"
+    }
+  ],
+  "paths": {
+    "/mcp": {
+      "post": {
+        "operationId": "callMcpTool",
+        "summary": "Execute a commerce or support tool",
+        "description": "Bridge to call tools like search_products, c_add_to_cart, and admin_get_order.",
+        "parameters": [
+          {
+            "name": "x-mcp-key",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Security Key for Silhouette Commerce AI"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "jsonrpc": { "type": "string", "default": "2.0" },
+                  "id": { "type": "integer", "default": 1 },
+                  "method": {
+                    "type": "string",
+                    "default": "tools/call"
+                  },
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "The name of the tool to call (e.g., 'search_products', 'c_add_to_cart')."
+                      },
+                      "arguments": {
+                        "type": "object",
+                        "description": "Input arguments for the tool."
+                      }
+                    },
+                    "required": ["name"]
+                  }
+                },
+                "required": ["method", "params"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tool output",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

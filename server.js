@@ -164,12 +164,15 @@ const httpServer = createServer(async (req, res) => {
     // DEBUG LOG: See EXACTLY what is coming in
     console.log(`[AUTH-DEBUG] Key: ${providedKey.substring(0, 5)}... Origin: ${originHeader} UA: ${userAgent}`);
 
-    // SECURE LOCK: Re-enabled with ChatGPT/OpenAI infrastructure exception
+    /*
+    // SECURE LOCK: Commenting out for safe creation phase
     if (MCP_API_KEY && providedKey !== MCP_API_KEY && !originHeader.includes("chatgpt.com") && !userAgent.includes("ChatGPT") && !userAgent.includes("OpenAI")) {
        console.log(`❌ REJECTED - Unauthorized hit from: ${originHeader || "No Origin"} UA: ${userAgent}`);
        return res.writeHead(401).end("Unauthorized");
     }
-    console.log("✅ ACCEPTED - Verified Session");
+    */
+    console.log(`[AUTH-LOG] INCOMING... Key: ${providedKey.substring(0, 5)}... Origin: ${originHeader} UA: ${userAgent}`);
+    console.log("✅ ALLOWED - Creation phase mode");
 
     const server = createProductServer();
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });

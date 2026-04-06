@@ -159,11 +159,17 @@ const httpServer = createServer(async (req, res) => {
   if (url.pathname === MCP_PATH) {
     const providedKey = (req.headers.authorization || req.headers["x-mcp-api-key"] || "").replace("Bearer ", "").trim();
     const originHeader = req.headers.origin || req.headers.referer || "";
+    const userAgent = req.headers["user-agent"] || "";
 
-    // AUTH CHECK: Allow if key matches OR request comes from ChatGPT domain
-    if (MCP_API_KEY && providedKey !== MCP_API_KEY && !originHeader.includes("chatgpt.com")) {
+    // DEBUG LOG: See EXACTLY what is coming in from ChatGPT
+    console.log(`[AUTH-DEBUG] Key: ${providedKey.substring(0, 5)}... Origin: ${originHeader} UA: ${userAgent}`);
+
+    // TEMPORARY BYPASS: If no key is provided, we still allow for testing (REMOVE AFTER SETUP)
+    if (MCP_API_KEY && providedKey !== MCP_API_KEY && !originHeader.includes("chatgpt.com") && !userAgent.includes("ChatGPT-User")) {
+       console.log("❌ REJECTED - Unauthorized attempt");
        return res.writeHead(401).end("Unauthorized");
     }
+    console.log("✅ ACCEPTED - Welcome to the server!");
 
     const server = createProductServer();
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });

@@ -158,9 +158,10 @@ const httpServer = createServer(async (req, res) => {
 
   if (url.pathname === MCP_PATH) {
     const providedKey = (req.headers.authorization || req.headers["x-mcp-api-key"] || "").replace("Bearer ", "").trim();
+    const originHeader = req.headers.origin || req.headers.referer || "";
 
-    // AUTH CHECK
-    if (MCP_API_KEY && providedKey !== MCP_API_KEY) {
+    // AUTH CHECK: Allow if key matches OR request comes from ChatGPT domain
+    if (MCP_API_KEY && providedKey !== MCP_API_KEY && !originHeader.includes("chatgpt.com")) {
        return res.writeHead(401).end("Unauthorized");
     }
 

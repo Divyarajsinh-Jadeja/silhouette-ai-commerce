@@ -159,20 +159,16 @@ const httpServer = createServer(async (req, res) => {
   if (url.pathname === MCP_PATH) {
     const providedKey = (req.headers.authorization || req.headers["x-mcp-api-key"] || "").replace("Bearer ", "").trim();
     const originHeader = req.headers.origin || req.headers.referer || "";
-    const userAgent = req.headers["user-agent"] || "";
+    const userAgent = (req.headers["user-agent"] || "").toLowerCase();
 
-    // DEBUG LOG: See EXACTLY what is coming in
-    console.log(`[AUTH-DEBUG] Key: ${providedKey.substring(0, 5)}... Origin: ${originHeader} UA: ${userAgent}`);
+    // SECURE LOCK: Final Production Logic
+    const isChatGPT = originHeader.includes("chatgpt.com");
+    const isOpenAI = userAgent.includes("openai") || userAgent.includes("chatgpt");
 
-    /*
-    // SECURE LOCK: Commenting out for safe creation phase
-    if (MCP_API_KEY && providedKey !== MCP_API_KEY && !originHeader.includes("chatgpt.com") && !userAgent.includes("ChatGPT") && !userAgent.includes("OpenAI")) {
-       console.log(`❌ REJECTED - Unauthorized hit from: ${originHeader || "No Origin"} UA: ${userAgent}`);
+    if (MCP_API_KEY && providedKey !== MCP_API_KEY && !isChatGPT && !isOpenAI) {
+       console.log(`❌ REJECTED - Unauthorized attempt from origin: ${originHeader || "None"} UA: ${userAgent}`);
        return res.writeHead(401).end("Unauthorized");
     }
-    */
-    console.log(`[AUTH-LOG] INCOMING... Key: ${providedKey.substring(0, 5)}... Origin: ${originHeader} UA: ${userAgent}`);
-    console.log("✅ ALLOWED - Creation phase mode");
 
     const server = createProductServer();
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });
